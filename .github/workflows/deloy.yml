@@ -1,0 +1,28 @@
+name: Deploy to Render CI/CD
+
+on:
+  push:
+    branches:
+      # Kích hoạt khi có thay đổi trên nhánh 'main'
+      - main
+  workflow_dispatch:
+    # Cho phép chạy thủ công từ giao diện GitHub
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      # Bước này là chìa khóa CI/CD: Nó gọi Hook URL đã lưu trong GitHub Secrets
+      - name: Trigger Render Deployment
+        run: |
+          # Gửi yêu cầu POST tới Deploy Hook URL
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+
+      - name: Deployment Initiated
+        run: echo "Render deployment successfully initiated."
