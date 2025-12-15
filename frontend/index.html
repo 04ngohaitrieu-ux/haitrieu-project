@@ -11,17 +11,176 @@
             min-height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
         }
         h1 {
             color: #008B8B;
-            text-align: center;
+            font-size: 32px;
+            margin: 10px 0;
+        }
+        h2 {
+            color: #008B8B;
+            font-size: 32px;
+            margin: 0 0 20px 0;
+        }
+        .form-group {
+            margin: 15px 0;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        button {
+            background-color: #008B8B;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #006b6b;
+        }
+        #employeeList {
+            margin-top: 30px;
+            text-align: left;
+        }
+        .employee-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #008B8B;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div>
-        <h2>Danh sách nhân viên</h2>
+    <div class="container">
+        <h2><u>Danh sách nhân viên</u></h2>
         <h1><u>NGÔ HẢI TRIỀU DH52201643-Cuối kỳ</u></h1>
+        
+        <div style="margin-top: 30px; border-top: 2px solid #008B8B; padding-top: 20px;">
+            <h3 style="color: #008B8B;">Thêm thông tin nhân viên</h3>
+            
+            <div class="form-group">
+                <label for="employeeName">Tên nhân viên:</label>
+                <input type="text" id="employeeName" placeholder="Nhập tên nhân viên">
+            </div>
+            
+            <div class="form-group">
+                <label for="employeeId">Mã nhân viên:</label>
+                <input type="text" id="employeeId" placeholder="Nhập mã nhân viên">
+            </div>
+            
+            <div class="form-group">
+                <label for="employeeEmail">Email:</label>
+                <input type="email" id="employeeEmail" placeholder="Nhập email">
+            </div>
+            
+            <div class="form-group">
+                <label for="employeePhone">Số điện thoại:</label>
+                <input type="tel" id="employeePhone" placeholder="Nhập số điện thoại">
+            </div>
+            
+            <div class="form-group">
+                <label for="employeeDepartment">Phòng ban:</label>
+                <input type="text" id="employeeDepartment" placeholder="Nhập phòng ban">
+            </div>
+            
+            <div class="form-group">
+                <label for="employeePosition">Chức vụ:</label>
+                <input type="text" id="employeePosition" placeholder="Nhập chức vụ">
+            </div>
+            
+            <button onclick="addEmployee()">Thêm nhân viên</button>
+            
+            <div id="employeeList"></div>
+        </div>
     </div>
+    
+    <script>
+        let employees = [];
+        
+        function addEmployee() {
+            const name = document.getElementById('employeeName').value;
+            const id = document.getElementById('employeeId').value;
+            const email = document.getElementById('employeeEmail').value;
+            const phone = document.getElementById('employeePhone').value;
+            const department = document.getElementById('employeeDepartment').value;
+            const position = document.getElementById('employeePosition').value;
+            
+            if (name && id) {
+                const employee = {name, id, email, phone, department, position};
+                employees.push(employee);
+                displayEmployees();
+                clearForm();
+            } else {
+                alert('Vui lòng nhập tên và mã nhân viên!');
+            }
+        }
+        
+        function displayEmployees() {
+            const listDiv = document.getElementById('employeeList');
+            listDiv.innerHTML = '<h3 style="color: #008B8B;">Danh sách nhân viên đã thêm:</h3>';
+            
+            employees.forEach((emp, index) => {
+                listDiv.innerHTML += `
+                    <div class="employee-item">
+                        <strong>${index + 1}. ${emp.name}</strong> (${emp.id})<br>
+                        Email: ${emp.email || 'N/A'}<br>
+                        Điện thoại: ${emp.phone || 'N/A'}<br>
+                        Phòng ban: ${emp.department || 'N/A'}<br>
+                        Chức vụ: ${emp.position || 'N/A'}<br>
+                        <button onclick="removeEmployee(${index})" style="background-color: #d9534f; margin-top: 10px; padding: 8px 15px; font-size: 14px;">Xóa</button>
+                    </div>
+                `;
+            });
+        }
+        
+        function removeEmployee(index) {
+            employees.splice(index, 1);
+            displayEmployees();
+        }
+        
+        function clearForm() {
+            document.getElementById('employeeName').value = '';
+            document.getElementById('employeeId').value = '';
+            document.getElementById('employeeEmail').value = '';
+            document.getElementById('employeePhone').value = '';
+            document.getElementById('employeeDepartment').value = '';
+            document.getElementById('employeePosition').value = '';
+            document.getElementById('employeeName').focus();
+        }
+    </script>
 </body>
 </html>
